@@ -1,30 +1,35 @@
 # Pricing Engine
 
-This project is a standalone pricing engine built with Streamlit, Pandas, and SQLite.
+This project is a standalone pricing engine built with Streamlit, Pandas, and SQLite. It allows users to upload purchase data, calculate landed costs, recommended retail prices (RRPP), and tiered pricing, while also managing RRPP markup tables and category multipliers.
 
 ## Features
 
-- **File Upload:** Upload purchase files in Excel format (.xlsx, .xls).
-- **Currency Conversion:** Convert purchase costs from different currencies to AUD.
-- **Landed Cost Calculation:** Calculate the landed cost for each item, including freight costs.
-- **RRPP Calculation:**  Calculate the Recommended Retail Price (RRPP) based on a customizable markup table.
-- **Tiered Pricing:** Generate up to 5 tiers of pricing based on the RRPP.
-- **Editable RRPP Markup Table:** View and edit the RRPP markup table directly in the application.
-- **Data Persistence:** Save the priced parts and the RRPP markup table to a local SQLite database.
-- **Export to CSV:** Export the priced parts to a CSV file.
+-   **Flexible File Upload:** Supports both Excel (.xlsx, .xls) and CSV (.csv) file formats for purchase data.
+-   **Downloadable Template:** Provides a CSV template with the correct column layout (`QtyPart`, `NumberInv`, `#Purchase`, `CostCategory`) for easy data preparation.
+-   **Intelligent Data Handling:** Automatically renames uploaded columns to internal application standards (`Qty`, `Part Number`, `Purchase Cost`, `Category`).
+-   **Category Mismatch Correction:** Identifies and allows interactive correction of mismatched categories in uploaded files using a dropdown selection of valid categories.
+-   **Dynamic Input Parameters:** Users can specify currency, exchange rate, total freight cost, and freight mode.
+-   **Customizable RRPP Markup Table:** View, edit, save, and reset the RRPP markup table directly within the application. Changes are timestamped.
+-   **Editable Category Multipliers:** View, edit, save, and reset category-specific multipliers. Changes are timestamped.
+-   **Comprehensive Pricing Calculation:** Calculates landed cost, RRPP, and up to five tiers of pricing.
+-   **Data Persistence:** Stores RRPP markup tables, category multipliers, and calculated priced parts in a local SQLite database (`pricing_engine.db`).
+-   **Save and Download:** A single button to save calculated pricing data to the database (with a timestamp) and trigger a CSV download of the results (excluding internal calculation columns).
+-   **Application Reset:** A dedicated button to clear the application's session state and reload it to its initial configuration.
 
 ## Project Structure
 
-- `app.py`: The main Streamlit application file. It contains the UI, pricing logic, and database interactions.
-- `local_pricing.db`: The SQLite database file used for storing RRPP markup tables and priced parts.
-- `requirements.txt`: A list of the Python dependencies for the project.
-- `pyproject.toml`: Project metadata and dependencies.
+-   `app.py`: The main Streamlit application file, handling the user interface, data loading, validation, and interaction with calculation and database modules.
+-   `calculations.py`: Contains the core pricing logic, including functions for calculating landed cost, RRPP, and tiered pricing.
+-   `database_setup.py`: A utility script for initializing and setting up the SQLite database schema, including baseline RRPP markup and category multipliers.
+-   `pricing_engine.db`: The SQLite database file used for storing RRPP markup tables, category multipliers, and historical priced parts data.
+-   `requirements.txt`: Lists the Python dependencies required to run the project.
+-   `pyproject.toml`: Project metadata and dependencies.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.8+
+-   Python 3.8+
 
 ### Setup
 
@@ -40,7 +45,13 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Run the Streamlit application:**
+4.  **Initialize the database:**
+    ```bash
+    python database_setup.py
+    ```
+    This will create `pricing_engine.db` and populate it with initial RRPP markup and category multiplier data.
+
+5.  **Run the Streamlit application:**
     ```bash
     streamlit run app.py
     ```
@@ -48,23 +59,18 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 
 ## How to Use
 
-1.  **Upload a purchase file:** Click on the "Upload purchase file (Excel)" button and select your Excel file. The file should contain columns for `Purchase Cost` and `Qty`.
-2.  **Set the input parameters:**
-    - **Currency:** Select the currency of the purchase costs.
-    - **Exchange Rate:** Enter the exchange rate to convert the purchase costs to AUD (if the currency is not AUD).
-    - **Total Freight Cost:** Enter the total freight cost in AUD.
-    - **Freight Mode:** Select "Auto" to distribute the freight cost automatically based on the purchase cost of each item, or "Manual" if you have a different method for calculating freight.
-3.  **Edit the RRPP Markup Table (Optional):** Check the "Edit RRPP Markup Table" box to view and edit the markup table.
-4.  **Calculate the price:** Click on the "Calculate Price" button to perform the pricing calculations.
-5.  **View the results:** The priced parts will be displayed in a table.
-6.  **Save the data:** The priced parts and the RRPP markup table will be automatically saved to the `local_pricing.db` database.
-7.  **Export to CSV:** You can download the priced parts as a CSV file.
+1.  **Upload a purchase file:** Click on the "Upload purchase file (Excel or CSV)" button and select your data file. You can download a CSV template for the expected format.
+2.  **Correct Mismatched Categories (if prompted):** If your uploaded file contains categories not present in the system, a section will appear allowing you to correct them using a dropdown menu. Click "Apply Changes" after making corrections.
+3.  **Set Input Parameters:** Adjust the currency, exchange rate, total freight cost, and freight mode as needed.
+4.  **Manage Markup and Multipliers (Optional):** Use the checkboxes to expand and edit the RRPP Markup Table or Category Multipliers. Remember to click "Save" after making changes or "Reset" to revert to defaults.
+5.  **Calculate Pricing:** Click the "Calculate Pricing" button to see the calculated landed costs, RRPP, and tiered pricing. This will display the results without saving them.
+6.  **Save and Download:** After calculating, click the "Save and Download" button to save the current calculated pricing data to the database (with a timestamp) and download a CSV file of the results. The application will then reload.
+7.  **Reset App:** If you wish to clear all session data and restart the application from its initial state, click the "Reset App" button.
 
-## Database
+## Database Schema
 
-The application uses a local SQLite database (`local_pricing.db`) to store the following tables:
+The `pricing_engine.db` database contains the following key tables:
 
-- `rrpp_markup_table`: Stores the RRPP markup table.
-- `priced_parts`: Stores the priced parts data.
-
-The database file will be created in the project root directory when the application is run for the first time.
+-   `rrpp_markup_table`: Stores the RRPP markup data (`From`, `To`, `RRPP Markup`, `timestamp`).
+-   `category_multipliers`: Stores the category multipliers (`Category`, `Multiplier`, `timestamp`).
+-   `priced_parts`: Stores historical pricing calculation results, including all input and calculated columns, along with a `timestamp` for each entry.
