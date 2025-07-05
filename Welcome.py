@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Pricing Engine", layout="wide")
+st.set_page_config(page_title="Welcome", layout="wide")
 
 st.title("Welcome to the Pricing Engine")
 
