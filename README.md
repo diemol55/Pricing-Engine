@@ -9,8 +9,9 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 -   **Intelligent Data Handling:** Automatically renames uploaded columns to internal application standards (`Qty`, `Part Number`, `Purchase Cost`, `Category`).
 -   **Category Mismatch Correction:** Identifies and allows interactive correction of mismatched categories in uploaded files using a dropdown selection of valid categories.
 -   **Dynamic Input Parameters:** Users can specify currency, exchange rate, total freight cost, and freight mode.
--   **Customizable RRPP Markup Table:** View, edit, save, and reset the RRPP markup table directly within the application. Changes are timestamped.
--   **Editable Category Multipliers:** View, edit, save, and reset category-specific multipliers. Changes are timestamped.
+-   **Customizable RRPP Markup Table:** View, edit, save, and reset the RRPP markup table directly within the application. Changes are timestamped and flagged by type (`individual_change`, `reset`, `price_increase`).
+-   **Editable Category Multipliers:** View, edit, save, and reset category-specific multipliers. Changes are timestamped and flagged by type (`individual_change`, `reset`, `price_increase`).
+-   **Percentage-Based Price Increase:** Apply a percentage increase to either the global RRPP markup table or to specific (or all) category multipliers.
 -   **Comprehensive Pricing Calculation:** Calculates landed cost, RRPP, and up to five tiers of pricing.
 -   **Data Persistence:** Stores RRPP markup tables, category multipliers, and calculated priced parts in a local SQLite database (`pricing_engine.db`).
 -   **Save and Download:** A single button to save calculated pricing data to the database (with a timestamp) and trigger a CSV download of the results (excluding internal calculation columns).
@@ -63,14 +64,15 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 2.  **Correct Mismatched Categories (if prompted):** If your uploaded file contains categories not present in the system, a section will appear allowing you to correct them using a dropdown menu. Click "Apply Changes" after making corrections.
 3.  **Set Input Parameters:** Adjust the currency, exchange rate, total freight cost, and freight mode as needed.
 4.  **Manage Markup and Multipliers (Optional):** Use the checkboxes to expand and edit the RRPP Markup Table or Category Multipliers. Remember to click "Save" after making changes or "Reset" to revert to defaults.
-5.  **Calculate Pricing:** Click the "Calculate Pricing" button to see the calculated landed costs, RRPP, and tiered pricing. This will display the results without saving them.
-6.  **Save and Download:** After calculating, click the "Save and Download" button to save the current calculated pricing data to the database (with a timestamp) and download a CSV file of the results. The application will then reload.
-7.  **Reset App:** If you wish to clear all session data and restart the application from its initial state, click the "Reset App" button.
+5.  **Apply Price Increase (Optional):** In the "Apply Price Increase" section, enter a percentage and choose whether to apply it to the RRPP Markup table (globally) or to specific (or all) Category Multipliers. Click "Apply Increase" to implement the change.
+6.  **Calculate Pricing:** Click the "Calculate Pricing" button to see the calculated landed costs, RRPP, and tiered pricing. This will display the results without saving them.
+7.  **Save and Download:** After calculating, click the "Save and Download" button to save the current calculated pricing data to the database (with a timestamp) and download a CSV file of the results. The application will then reload.
+8.  **Reset App:** If you wish to clear all session data and restart the application from its initial state, click the "Reset App" button.
 
 ## Database Schema
 
 The `pricing_engine.db` database contains the following key tables:
 
--   `rrpp_markup_table`: Stores the RRPP markup data (`From`, `To`, `RRPP Markup`, `timestamp`).
--   `category_multipliers`: Stores the category multipliers (`Category`, `Multiplier`, `timestamp`).
+-   `rrpp_markup_table`: Stores the RRPP markup data (`From`, `To`, `RRPP Markup`, `timestamp`, `change_type`).
+-   `category_multipliers`: Stores the category multipliers (`Category`, `Multiplier`, `timestamp`, `change_type`).
 -   `priced_parts`: Stores historical pricing calculation results, including all input and calculated columns, along with a `timestamp` for each entry.
