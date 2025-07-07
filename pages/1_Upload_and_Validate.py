@@ -67,4 +67,4 @@ if uploaded_file:
             st.rerun()
 
     st.subheader("File Preview")
-    st.dataframe(st.session_state.df.head(20))
+    st.dataframe(st.session_state.df)
