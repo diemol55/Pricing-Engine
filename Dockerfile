@@ -10,6 +10,12 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the Streamlit configuration
+COPY .streamlit/config.toml /root/.streamlit/config.toml
+
+# Copy the favicon
+COPY favicon.png .
+
 # Copy the rest of the application code
 COPY . .
 

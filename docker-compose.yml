@@ -5,11 +5,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8501:8501"
+    hostname: pricing-engine
+    # Streamlit app runs on 8501 internally, no need to expose to host directly
+    # ports:
+    #   - "8501:8501"
     volumes:
-      # Mount the current directory into the container to allow for live code changes (optional, remove for production)
-      # - .:/app
-      # Mount the database file to persist data outside the container
       - ./pricing_engine.db:/app/pricing_engine.db
     command: streamlit run Welcome.py --server.port=8501 --server.address=0.0.0.0
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - pricing-engine

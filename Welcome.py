@@ -1,6 +1,16 @@
 import streamlit as st
 
-st.set_page_config(page_title="Welcome", layout="wide")
+st.set_page_config(page_title="Welcome", layout="wide", page_icon="favicon.png")
+
+# Initialize session state variables for input parameters if they don't exist
+if 'currency' not in st.session_state:
+    st.session_state.currency = "AUD"
+if 'exchange_rate' not in st.session_state:
+    st.session_state.exchange_rate = 1.0
+if 'freight_cost' not in st.session_state:
+    st.session_state.freight_cost = 0.0
+if 'freight_mode' not in st.session_state:
+    st.session_state.freight_mode = "Auto"
 
 st.title("Welcome to the Pricing Engine")
 
