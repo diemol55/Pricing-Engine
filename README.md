@@ -29,12 +29,14 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 -   `pricing_engine.db`: The SQLite database file used for storing RRPP markup tables, category multipliers, and historical priced parts data.
 -   `requirements.txt`: Lists the Python dependencies required to run the project.
 -   `pyproject.toml`: Project metadata and dependencies.
+-   `Dockerfile`: Defines the Docker image for the application.
+-   `docker-compose.yml`: Defines the Docker Compose setup for easy deployment.
 
 ## Getting Started
 
 ### Prerequisites
 
--   Python 3.8+
+-   Docker and Docker Compose installed.
 
 ### Setup
 
@@ -46,17 +48,44 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
     ```bash
     cd pricing-engine
     ```
-3.  **Install the Python dependencies:**
+
+### Deployment with Docker Compose
+
+1.  **Build and run the services:**
+    This command will build the Docker image (if it doesn't exist or has changed) and start the `pricing-engine` service. The `database_setup.py` script is automatically run during the Docker image build process to initialize the `pricing_engine.db` database with initial RRPP markup and category multiplier data.
+    ```bash
+    docker-compose up --build -d
+    ```
+    -   `--build`: Builds the images before starting containers.
+    -   `-d`: Runs the containers in detached mode (in the background).
+
+2.  **Access the application:**
+    Once the container is running, you can access the Streamlit application in your web browser at `http://localhost:8501`.
+
+3.  **Stop the services:**
+    To stop the running services:
+    ```bash
+    docker-compose down
+    ```
+    This will stop and remove the containers, networks, and volumes created by `up`.
+
+**Important Note on Data Persistence:**
+The `docker-compose.yml` includes a volume mount for `pricing_engine.db` (`./pricing_engine.db:/app/pricing_engine.db`). This ensures that your SQLite database file will be persisted on your host machine, even if you stop and remove the Docker container. This is crucial for retaining your RRPP markup tables, category multipliers, and historical priced parts data.
+
+### Local Setup (without Docker)
+
+If you prefer to run the application directly on your machine without Docker, follow these steps:
+
+1.  **Install Python dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Initialize the database:**
+2.  **Initialize the database:**
+    This step is crucial to create the `pricing_engine.db` file and populate it with the initial RRPP markup and category multiplier data. You only need to run this once.
     ```bash
     python database_setup.py
     ```
-    This will create `pricing_engine.db` and populate it with initial RRPP markup and category multiplier data.
-
-5.  **Run the Streamlit application:**
+3.  **Run the Streamlit application:**
     ```bash
     streamlit run Welcome.py
     ```

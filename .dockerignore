@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+.git/
+.vscode/
+*.pyc
+*.log
+.DS_Store
+uv.lock
