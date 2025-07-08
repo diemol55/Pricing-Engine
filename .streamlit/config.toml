@@ -1,0 +1,22 @@
+[server]
+headless = true
+port = 8501
+enableCORS = true
+enableXsrfProtection = false
+
+[browser]
+serverAddress = "pricing-engine"
+serverPort = 80
+
+[client]
+showErrorDetails = true
+
+[global]
+logLevel = "info"
+
+[runner]
+magicEnabled = true
+
+[theme]
+base = "dark"
+font = "sans serif"

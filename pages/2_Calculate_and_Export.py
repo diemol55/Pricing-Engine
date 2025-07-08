@@ -12,15 +12,61 @@ if 'df' not in st.session_state:
     st.warning("Please upload a file on the 'Upload and Validate' page first.")
 else:
     st.subheader("Input Parameters")
+
+    # Callback functions to update session state immediately
+    def update_currency():
+        st.session_state.currency = st.session_state.currency_input_widget
+
+    def update_exchange_rate():
+        st.session_state.exchange_rate = st.session_state.exchange_rate_input_widget
+
+    def update_freight_cost():
+        st.session_state.freight_cost = st.session_state.freight_cost_input_widget
+
+    def update_freight_mode():
+        st.session_state.freight_mode = st.session_state.freight_mode_input_widget
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        currency = st.selectbox("Currency", options=["AUD", "USD"], index=0)
+        st.selectbox(
+            "Currency",
+            options=["AUD", "USD"],
+            key="currency_input_widget", # Use a distinct key for the widget
+            index=["AUD", "USD"].index(st.session_state.currency),
+            on_change=update_currency
+        )
     with col2:
-        exchange_rate = st.number_input("Exchange Rate (if not AUD)", min_value=0.0, value=1.0, step=0.01)
+        st.number_input(
+            "Exchange Rate (if not AUD)",
+            min_value=0.0,
+            value=st.session_state.exchange_rate,
+            step=0.01,
+            key="exchange_rate_input_widget", # Use a distinct key for the widget
+            on_change=update_exchange_rate
+        )
     with col3:
-        freight_cost = st.number_input("Total Freight Cost (AUD)", min_value=0.0, value=0.0, step=1.0)
+        st.number_input(
+            "Total Freight Cost (AUD)",
+            min_value=0.0,
+            value=st.session_state.freight_cost,
+            step=1.0,
+            key="freight_cost_input_widget", # Use a distinct key for the widget
+            on_change=update_freight_cost
+        )
     with col4:
-        freight_mode = st.selectbox("Freight Mode", options=["Auto", "Manual"], index=0)
+        st.selectbox(
+            "Freight Mode",
+            options=["Auto", "Manual"],
+            key="freight_mode_input_widget", # Use a distinct key for the widget
+            index=["Auto", "Manual"].index(st.session_state.freight_mode),
+            on_change=update_freight_mode
+        )
+
+    # Assign the session state values to local variables for use in calculations
+    currency = st.session_state.currency
+    exchange_rate = st.session_state.exchange_rate
+    freight_cost = st.session_state.freight_cost
+    freight_mode = st.session_state.freight_mode
 
     if freight_mode == "Manual":
         st.warning("Manual freight mode selected. Please ensure freight rate is added as a percentage elsewhere.")
@@ -75,6 +121,10 @@ else:
     with col_calc3:
         if st.button("Reset App"):
             st.session_state.clear()
+            st.session_state.currency = "AUD"
+            st.session_state.exchange_rate = 1.0
+            st.session_state.freight_cost = 0.0
+            st.session_state.freight_mode = "Auto"
             st.rerun()
 
     if 'download_csv_data' in st.session_state and st.session_state.download_csv_data:

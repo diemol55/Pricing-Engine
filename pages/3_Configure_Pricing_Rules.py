@@ -96,11 +96,13 @@ with increase_tab:
             current_multipliers = pd.read_sql("SELECT * FROM category_multipliers", conn)
             if selected_category_for_increase == "All Categories":
                 current_multipliers["Multiplier"] = current_multipliers["Multiplier"] * (1 + increase_percentage / 100)
+                current_multipliers["timestamp"] = datetime.now()
+                current_multipliers["change_type"] = "price_increase"
                 st.success(f"All Category Multipliers increased by {increase_percentage}%")
             else:
                 current_multipliers.loc[current_multipliers["Category"] == selected_category_for_increase, "Multiplier"] *= (1 + increase_percentage / 100)
+                current_multipliers.loc[current_multipliers["Category"] == selected_category_for_increase, "timestamp"] = datetime.now()
+                current_multipliers.loc[current_multipliers["Category"] == selected_category_for_increase, "change_type"] = "price_increase"
                 st.success(f"Category '{selected_category_for_increase}' Multiplier increased by {increase_percentage}%")
-            current_multipliers["timestamp"] = datetime.now()
-            current_multipliers["change_type"] = "price_increase"
             current_multipliers.to_sql("category_multipliers", conn, if_exists="replace", index=False)
         st.rerun()
