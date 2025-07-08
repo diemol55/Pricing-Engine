@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  pricing-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      # Mount the current directory into the container to allow for live code changes (optional, remove for production)
+      # - .:/app
+      # Mount the database file to persist data outside the container
+      - ./pricing_engine.db:/app/pricing_engine.db
+    command: streamlit run Welcome.py --server.port=8501 --server.address=0.0.0.0
