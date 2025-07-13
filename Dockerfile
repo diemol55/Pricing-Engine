@@ -4,6 +4,9 @@ FROM python:3.12-slim-bookworm
 # Set the working directory in the container
 WORKDIR /app
 
+# Update and upgrade system packages
+RUN apt-get update && apt-get upgrade -y
+
 # Copy only the requirements file first to leverage Docker cache
 COPY requirements.txt .
 
