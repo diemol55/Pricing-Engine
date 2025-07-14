@@ -2,3 +2,6 @@
 /.vscode
 __pycache__/
 *.db
+
+# Gemini CLI file
+GEMINI.md
