@@ -13,8 +13,9 @@ uploaded_file = st.file_uploader("Upload purchase file (Excel or CSV)", type=[".
 @st.cache_data
 def get_template_df():
     return pd.DataFrame({
-        "QtyPart": [1, 2],
+        "Qty": [1, 2],
         "Inv #": ["INV001", "INV002"],
+        "Part Number": ["PN001", "PN002"],
         "Purchase Cost": [100, 200],
         "Category": ["Speciality", "Universal"]
     })
@@ -32,12 +33,15 @@ if uploaded_file:
             st.session_state.df = pd.read_csv(uploaded_file)
         else:
             st.session_state.df = pd.read_excel(uploaded_file)
-        st.session_state.df.columns = st.session_state.df.columns.str.strip()  # Remove whitespace from headers
-        st.session_state.df.rename(columns={
-            "QtyPart": "Qty",
-            "#Purchase": "Purchase Cost",
-            "CostCategory": "Category"
-        }, inplace=True)
+        st.session_state.df.columns = st.session_state.df.columns.str.strip()
+        # Clean and convert data types
+        for col in st.session_state.df.columns:
+            if st.session_state.df[col].dtype == 'object':
+                st.session_state.df[col] = st.session_state.df[col].str.strip()
+        
+        st.session_state.df['Purchase Cost'] = st.session_state.df['Purchase Cost'].replace({'[^0-9.]': ''}, regex=True).astype(float)
+        st.session_state.df['Qty'] = pd.to_numeric(st.session_state.df['Qty'], errors='coerce').fillna(0).astype(int)
+
         st.session_state.uploaded_file_name = uploaded_file.name
 
     conn = sqlite3.connect("pricing_engine.db")
