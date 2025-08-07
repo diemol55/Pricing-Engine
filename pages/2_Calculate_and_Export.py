@@ -30,9 +30,9 @@ else:
     with col1:
         st.selectbox(
             "Currency",
-            options=["AUD", "USD"],
+            options=["USD","AUD"],
             key="currency_input_widget", # Use a distinct key for the widget
-            index=["AUD", "USD"].index(st.session_state.currency),
+            index=["USD", "AUD"].index(st.session_state.currency),
             on_change=update_currency
         )
     with col2:

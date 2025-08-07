@@ -4,7 +4,7 @@ st.set_page_config(page_title="Welcome", layout="wide", page_icon="favicon.png")
 
 # Initialize session state variables for input parameters if they don't exist
 if 'currency' not in st.session_state:
-    st.session_state.currency = "AUD"
+    st.session_state.currency = "USD"
 if 'exchange_rate' not in st.session_state:
     st.session_state.exchange_rate = 1.0
 if 'freight_cost' not in st.session_state:
