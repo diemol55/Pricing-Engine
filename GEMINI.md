@@ -16,9 +16,9 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 
 -   `Welcome.py`: The main Streamlit application entry point, serving as the welcome page.
 -   `pages/`: Directory containing the individual pages of the application:
-    -   `1_Upload_and_Validate.py`: Handles file uploads, data validation, and category mismatch correction.
-    -   `2_Configure_Pricing_Rules.py`: Manages RRPP markup tables, category multipliers, and price increase functionality.
-    -   `3_Calculate_and_Export.py`: Performs pricing calculations and allows saving/exporting of results.
+    -   `1_Upload_and_Validate.py`: Handles file uploads, data validation, and interactive category editing.
+    -   `2_Calculate_and_Export.py`: Performs pricing calculations and allows saving/exporting of results.
+    -   `3_Configure_Pricing_Rules.py`: Manages RRPP markup tables, category multipliers, and price increase functionality.
 -   `calculations.py`: Contains the core pricing logic, including functions for calculating landed cost, RRPP, and tiered pricing.
 -   `database_setup.py`: A utility script for initializing and setting up the SQLite database schema, including baseline RRPP markup and category multipliers.
 -   `pricing_engine.db`: The SQLite database file used for storing RRPP markup tables, category multipliers, and historical priced parts data.
@@ -31,4 +31,4 @@ This project is a standalone pricing engine built with Streamlit, Pandas, and SQ
 -   **Data Persistence:** Data is stored in a local SQLite database, with a dedicated script for schema setup.
 -   **Change Tracking:** Changes to the RRPP markup table and category multipliers are timestamped and flagged by type (`individual_change`, `reset`, `price_increase`).
 -   **User Input Validation:** The application validates uploaded data and provides a user-friendly way to correct errors.
--   **Session State Management:** Streamlit's session state is used to maintain data and state across different pages of the application.
+-   **Session State Management:** Streamlit's session state is used to maintain data and state across different pages of the application. The session is cleared whenever a new file is uploaded to ensure a clean state. The default currency is set to "USD".

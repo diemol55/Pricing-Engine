@@ -36,7 +36,7 @@ st.download_button(
 if uploaded_file:
     if st.session_state.get('uploaded_file_name') != uploaded_file.name:
         st.session_state.clear()
-        st.session_state.currency = "AUD"
+        st.session_state.currency = "USD"
         st.session_state.exchange_rate = 1.0
         st.session_state.freight_cost = 0.0
         st.session_state.freight_mode = "Auto"
