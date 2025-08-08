@@ -30,9 +30,9 @@ else:
     with col1:
         st.selectbox(
             "Currency",
-            options=["AUD", "USD"],
+            options=["USD","AUD"],
             key="currency_input_widget", # Use a distinct key for the widget
-            index=["AUD", "USD"].index(st.session_state.currency),
+            index=0, # Set default to USD
             on_change=update_currency
         )
     with col2:
@@ -121,7 +121,7 @@ else:
     with col_calc3:
         if st.button("Reset App"):
             st.session_state.clear()
-            st.session_state.currency = "AUD"
+            st.session_state.currency = "USD"
             st.session_state.exchange_rate = 1.0
             st.session_state.freight_cost = 0.0
             st.session_state.freight_mode = "Auto"
