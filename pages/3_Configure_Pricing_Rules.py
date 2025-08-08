@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 from database_setup import get_initial_markup_data, get_initial_category_multipliers
 
-st.set_page_config(page_title="Configure Pricing Rules", layout="wide")
+st.set_page_config(page_title="Configure Pricing Rules", layout="wide", page_icon="favicon.png")
 
 st.title("Configure Pricing Rules")
 

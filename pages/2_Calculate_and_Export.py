@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 from calculations import calculate_landed_cost, calculate_rrpp, calculate_tiered_pricing
 
-st.set_page_config(page_title="Calculate and Export", layout="wide")
+st.set_page_config(page_title="Calculate and Export", layout="wide", page_icon="favicon.png")
 
 st.title("Calculate and Export")
 
