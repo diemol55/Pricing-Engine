@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 
-st.set_page_config(page_title="Upload and Validate", layout="wide")
+st.set_page_config(page_title="Upload and Validate", layout="wide", page_icon="favicon.png")
 
 st.title("Upload and Validate Data")
 
